@@ -1,0 +1,16 @@
+[Database]
+Driver = "mysql"
+Name = "package_db"
+Host = "127.0.0.1"
+Port = 3306
+User = "pkgmanager"
+Password = ""
+
+[Server]
+ListenAddress = "127.0.0.1:8080"
+AllowedHosts = [
+    {Host = "127.0.0.1:8080", Https = false}
+]
+UseForwardedProtoHeader = false
+TemplateDir = "templates/"
+StaticDir = "static/"
