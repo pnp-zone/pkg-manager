@@ -4,8 +4,8 @@ import "github.com/myOmikron/echotools/utilitymodels"
 
 type Maintainer struct {
 	utilitymodels.CommonID
-	UserID         uint
-	User           utilitymodels.User
-	ContactMail    string
-	GPGFingerprint string
+	UserID      uint
+	User        utilitymodels.User
+	ContactMail string
+	Fingerprint string
 }

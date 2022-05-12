@@ -1,0 +1,28 @@
+{{define "index"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="/static/img/favicon.png" type="image/png" rel="icon">
+    <link href="/static/css/pnp-zone-pkgs.css" type="text/css" rel="stylesheet">
+    <title>pnp-zone packages</title>
+</head>
+<body>
+    <div class="topBar">
+        <div class="topBarContent">
+            <a href="/" class="topBarIcon">
+                <img class="invert" src="/static/img/packages.svg" alt="index icon">
+            </a>
+            <div class="topBarRight">
+                <a href="/login" class="topBarItem">Login</a>
+                <a href="/register" class="topBarItem">Register</a>
+            </div>
+        </div>
+    </div>
+    <form method="GET" action="/" class="searchContent">
+        <label for="search"></label><input id="search" class="search" type="search" name="search" placeholder="Search" required>
+        <button class="searchButton"><img class="invert" src="/static/img/search.svg" alt="search icon"></button>
+    </form>
+</body>
+</html>
+{{end}}

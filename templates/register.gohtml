@@ -1,0 +1,55 @@
+{{define "register"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="/static/img/favicon.png" type="image/png" rel="icon">
+    <link href="/static/css/pnp-zone-pkgs.css" type="text/css" rel="stylesheet">
+    <title>pnp-zone packages</title>
+</head>
+<body>
+    <div class="topBar">
+        <div class="topBarContent">
+            <a href="/" class="topBarIcon">
+                <img class="invert" src="/static/img/packages.svg" alt="index icon">
+            </a>
+            <div class="topBarRight">
+                <a href="/login" class="topBarItem">Login</a>
+                <a href="/register" class="topBarItem">Register</a>
+            </div>
+        </div>
+    </div>
+    <div class="loginContent">
+        <form method="POST" action="/frontend/register" class="registerBox">
+            <div class="column">
+                <h1 class="heading">Registration</h1>
+                <label>
+                    <input id="username" class="input" name="username" placeholder="Username" required>
+                </label>
+                <label>
+                    <input id="email" class="input" type="email" name="mail" placeholder="Mail" required>
+                </label>
+                <label>
+                    <input id="contactMail" class="input" type="email" name="contact_mail" placeholder="Contact Mail" required>
+                </label>
+                <label>
+                    <input id="password" class="input" type="password" name="password" placeholder="Password" required>
+                </label>
+                <label>
+                    <input id="password2" class="input" type="password" name="password2" placeholder="Confirm Password" required>
+                </label>
+            </div>
+            <div class="column">
+                <label for="pgp">
+                    Paste a valid PGP public key. <a class="link" href="https://www.gnupg.org/gph/en/manual.html" target="_blank">Learn how to use GnuPG.</a>
+                </label>
+                <textarea id="pgp" class="textarea" name="pgp" placeholder="-----BEGIN PGP PUBLIC KEY BLOCK-----" required></textarea>
+                <button class="button">
+                    Register
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+{{end}}

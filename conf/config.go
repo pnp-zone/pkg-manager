@@ -20,6 +20,7 @@ type Server struct {
 	UseForwardedProtoHeader bool
 	TemplateDir             string
 	StaticDir               string
+	PGPDir                  string
 }
 
 type Config struct {

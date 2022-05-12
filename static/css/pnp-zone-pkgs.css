@@ -1,0 +1,235 @@
+:root {
+    --level-0: #262b38;
+    --level-1: #343849;
+    --level-2: #394154;
+    --level-3: #485169;
+    --level-4: #636a8c;
+    --level-5: #919ccc;
+    --text: #eeeeee;
+    --text-dark: #cccccc;
+}
+
+body {
+    margin: 0;
+    background-color: var(--level-0);
+    color: var(--text);
+    font-family: BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue", sans-serif;
+}
+
+.invert {
+    filter: invert(100%);
+}
+
+.button {
+    color: var(--text);
+    cursor: pointer;
+    padding: 0.5rem 2rem 0.5rem 2rem;
+    background-color: inherit;
+    border: 1px solid var(--level-4);
+    transition: all ease-in-out 150ms;
+}
+
+.button:hover {
+    background-color: var(--level-3);
+}
+
+.input {
+    color: var(--text);
+    background-color: var(--level-0);
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    width: calc(100% - 2rem);
+    border: 1px solid var(--level-4);
+}
+
+.link {
+    color: var(--text);
+    transition: all ease-in-out 150ms;
+}
+
+.link:hover {
+    color: var(--level-5);
+}
+
+.heading {
+    margin-top: 0;
+}
+
+.redBorder {
+    border: 1px solid red;
+}
+
+/*
+TopBar
+ */
+
+.topBar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    height: 5rem;
+    width: 100%;
+    background-color: var(--level-2);
+    display: flex;
+    justify-content: end;
+}
+
+.topBarContent {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.topBarRight {
+    display: flex;
+}
+
+.topBarIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    width: 8rem;
+    background-color: var(--level-2);
+    transition: all ease-in-out 150ms;
+}
+
+.topBarIcon:hover {
+    background-color: var(--level-4);
+}
+
+.topBarItem {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: inherit;
+    transition: all ease-in-out 150ms;
+    text-decoration: none;
+    border: none;
+    color: var(--text);
+    width: 7em;
+    font-size: 1rem;
+}
+
+.topBarItem:hover {
+    background-color: var(--level-4);
+}
+
+/*
+Search
+ */
+
+.searchContent {
+    display: flex;
+    margin-top: 4rem;
+    justify-content: center;
+}
+
+.search {
+    font-size: large;
+    color: var(--text);
+    background-color: var(--level-1);
+    border-top: 1px solid var(--level-4);
+    border-bottom: 1px solid var(--level-4);
+    border-left: 1px solid var(--level-4);
+    border-right: none;
+    width: 40rem;
+    transform: translateX(2.5rem);
+    padding: 0.5rem 1rem 0.5rem 1rem;
+}
+
+.searchButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+    cursor: pointer;
+    color: var(--text);
+    background-color: var(--level-1);
+    border: 1px solid var(--level-4);
+    padding: 0.5rem 2rem 0.5rem 2rem;
+    width: 5rem;
+    transform: translateX(-2.5rem);
+    transition: all ease-in-out 150ms;
+}
+
+.searchButton:hover {
+    background-color: var(--level-3);
+}
+
+.searchButton img {
+    height: 100%;
+}
+
+/*
+Login declaration
+ */
+
+.loginContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: calc(100vh - 5rem);
+}
+
+.loginBox {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--level-2);
+    padding: 3rem;
+    height: fit-content;
+}
+
+.loginBox input {
+    margin-bottom: 1rem;
+}
+
+.loginBox button {
+    margin-top: 1rem
+}
+
+/*
+Register declaration
+ */
+
+.registerBox {
+    display: flex;
+    background-color: var(--level-2);
+    padding: 3rem;
+    height: fit-content;
+}
+
+
+.registerBox input {
+    margin-bottom: 1rem;
+}
+
+.registerBox button {
+    margin-top: 1rem
+}
+
+.registerBox .column:first-child {
+    margin-right: 3rem;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.column input {
+    width: 20rem;
+}
+
+.textarea {
+    resize: none;
+    background-color: var(--level-0);
+    color: var(--text);
+    border: 1px solid var(--level-4);
+    width: 30rem;
+    height: 15rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+}
+

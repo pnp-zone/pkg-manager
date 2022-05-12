@@ -72,7 +72,7 @@ func StartServer(configPath string) {
 	}))
 
 	// Define routes
-	defineRoutes(e, config)
+	defineRoutes(e, db, config)
 
 	// Start server
 	execution.SignalStart(e, config.Server.ListenAddress, &execution.Config{

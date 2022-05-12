@@ -1,0 +1,38 @@
+{{define "login"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="/static/img/favicon.png" type="image/png" rel="icon">
+    <link href="/static/css/pnp-zone-pkgs.css" type="text/css" rel="stylesheet">
+    <title>pnp-zone packages</title>
+</head>
+<body>
+    <div class="topBar">
+        <div class="topBarContent">
+            <a href="/" class="topBarIcon">
+                <img class="invert" src="/static/img/packages.svg" alt="index icon">
+            </a>
+            <div class="topBarRight">
+                <a href="/login" class="topBarItem">Login</a>
+                <a href="/register" class="topBarItem">Register</a>
+            </div>
+        </div>
+    </div>
+    <div class="loginContent">
+        <form method="POST" action="/frontend/login" class="loginBox">
+            <h1 class="heading">Login</h1>
+            <label for="username">
+                <input id="username" placeholder="Username" name="username" class="input" required>
+            </label>
+            <label for="password">
+                <input id="password" type="password" placeholder="Password" name="password" class="input" required>
+            </label>
+            <button class="button">
+                Login
+            </button>
+        </form>
+    </div>
+</body>
+</html>
+{{end}}
