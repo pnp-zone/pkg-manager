@@ -3,13 +3,17 @@ package server
 import (
 	"errors"
 	"fmt"
+	"github.com/ProtonMail/gopenpgp/v2/crypto"
 	"github.com/labstack/echo/v4"
 	emw "github.com/labstack/echo/v4/middleware"
 	"github.com/myOmikron/echotools/color"
 	"github.com/myOmikron/echotools/execution"
 	mw "github.com/myOmikron/echotools/middleware"
+	"github.com/myOmikron/echotools/worker"
 	"github.com/pelletier/go-toml"
 	"github.com/pnp-zone/pkg-manager/conf"
+	"github.com/pnp-zone/pkg-manager/models"
+	"github.com/pnp-zone/pkg-manager/task"
 	"html/template"
 	"io/fs"
 	"io/ioutil"
@@ -188,7 +192,10 @@ func StartServer(configPath string) {
 	}))
 
 	// Define routes
-	defineRoutes(e, db, config)
+	defineRoutes(e, db, pool, ring, config)
+
+	// Start generation of index
+	go task.BuildIndex(db, ring, config)
 
 	// Start server
 	execution.SignalStart(e, config.Server.ListenAddress, &execution.Config{

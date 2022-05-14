@@ -1,14 +1,16 @@
 package server
 
 import (
+	"github.com/ProtonMail/gopenpgp/v2/crypto"
 	"github.com/labstack/echo/v4"
+	"github.com/myOmikron/echotools/worker"
 	"github.com/pnp-zone/pkg-manager/conf"
 	"github.com/pnp-zone/pkg-manager/handler/frontend"
 	"github.com/pnp-zone/pkg-manager/handler/frontendapi"
 	"gorm.io/gorm"
 )
 
-func defineRoutes(e *echo.Echo, db *gorm.DB, config *conf.Config) {
+func defineRoutes(e *echo.Echo, db *gorm.DB, pool worker.Pool, keyring *crypto.KeyRing, config *conf.Config) {
 	f := frontend.Wrapper{
 		DB:     db,
 		Config: config,
