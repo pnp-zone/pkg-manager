@@ -55,8 +55,102 @@ func StartServer(configPath string) {
 	color.Println(color.GREEN, "done")
 
 	// Database
+	fmt.Print("Initializing database ... ")
 	db := initializeDatabase(config)
+	color.Println(color.GREEN, "done")
 
+	// Worker pool
+	pool := worker.NewPool(&worker.PoolConfig{
+		NumWorker: 20,
+		QueueSize: 200,
+	})
+	pool.Start()
+
+	// OpenPGP key generation
+	if _, err := os.Stat(config.Server.PGPDir + "pkg.asc"); os.IsNotExist(err) {
+		color.Println(color.PURPLE, "Missing key for package manager: "+config.Server.PGPDir+"pkg.asc")
+		fmt.Print("Generating new key ... ")
+
+		if key, err := crypto.GenerateKey("pnp-zone-pkg-manager", "pkg@pnp.zone", "rsa", 4096); err != nil {
+			color.Println(color.RED, "error")
+			color.Println(color.RED, "Could not create key")
+			os.Exit(1)
+		} else {
+			armor, err := key.Armor()
+			if err != nil {
+				color.Println(color.RED, "error")
+				color.Println(color.RED, "Could not get armored version of key")
+				os.Exit(1)
+			}
+			if err := ioutil.WriteFile(config.Server.PGPDir+"pkg.asc", []byte(armor), 0600); err != nil {
+				color.Println(color.RED, "error")
+				color.Println(color.RED, "Could not write pkg manager key")
+				os.Exit(1)
+			}
+		}
+
+		color.Println(color.GREEN, "done")
+	}
+
+	var ring *crypto.KeyRing
+	fmt.Print("Importing key for package manager ... ")
+	if file, err := ioutil.ReadFile(config.Server.PGPDir + "pkg.asc"); err != nil {
+		color.Println(color.RED, "error")
+		color.Println(color.RED, err.Error())
+		os.Exit(1)
+	} else {
+		if armored, err := crypto.NewKeyFromArmored(string(file)); err != nil {
+			color.Println(color.RED, "error")
+			color.Println(color.RED, "Could not retrieve key from file:")
+			color.Println(color.RED, err.Error())
+			os.Exit(1)
+		} else {
+			color.Println(color.GREEN, "done")
+
+			fmt.Print("Creating keyring ... ")
+			if keyRing, err := crypto.NewKeyRing(armored); err != nil {
+				color.Println(color.RED, "error")
+				color.Println(color.RED, "Could not create keyring from retrieved key:")
+				color.Println(color.RED, err.Error())
+				os.Exit(1)
+			} else {
+				color.Println(color.GREEN, "done")
+				ring = keyRing
+			}
+		}
+	}
+
+	fmt.Println(ring.FirstKeyID)
+
+	fmt.Print("Populating keyring ... ")
+	maintainer := make([]models.Maintainer, 0)
+	db.Find(&maintainer)
+	for _, mt := range maintainer {
+		filename := config.Server.PGPDir + mt.Fingerprint + ".asc"
+		if content, err := ioutil.ReadFile(filename); err != nil {
+			color.Println(color.RED, "error")
+			color.Printf(color.RED, "Error retrieving key: %s\n", filename)
+			color.Println(color.RED, err.Error())
+			os.Exit(1)
+		} else {
+			if armored, err := crypto.NewKeyFromArmored(string(content)); err != nil {
+				color.Println(color.RED, "error")
+				color.Printf(color.RED, "Error retrieving key from file: %s\n", filename)
+				color.Println(color.RED, err.Error())
+				os.Exit(1)
+			} else {
+				if err := ring.AddKey(armored); err != nil {
+					color.Println(color.RED, "error")
+					color.Printf(color.RED, "Error adding key to keyring: %s\n", filename)
+					color.Println(color.RED, err.Error())
+					os.Exit(1)
+				}
+			}
+		}
+	}
+	color.Println(color.GREEN, "done")
+
+	// Webserver
 	e := echo.New()
 
 	// Template rendering
