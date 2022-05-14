@@ -21,11 +21,13 @@ func defineRoutes(e *echo.Echo, db *gorm.DB, pool worker.Pool, keyring *crypto.K
 	e.GET("/register", f.Register)
 
 	fa := frontendapi.Wrapper{
-		DB:     db,
-		Config: config,
+		DB:      db,
+		Config:  config,
+		Keyring: keyring,
 	}
 	e.POST("/frontend/register", fa.Register)
 	e.POST("/frontend/login", fa.Login)
 
 	e.Static("/static/", config.Server.StaticDir)
+	e.Static("/packages/", config.Server.PkgDir)
 }
