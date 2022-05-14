@@ -52,6 +52,13 @@ func (w *Wrapper) Register(c echo.Context) error {
 		return c.String(400, "Key is revoked")
 	}
 
+	if armored.IsPrivate() {
+		return c.String(400, "Don't upload your private key!")
+	}
+
+	// Clear private parameter
+	armored.ClearPrivateParams()
+
 	fpr := armored.GetFingerprint()
 
 	var count int64
@@ -70,6 +77,8 @@ func (w *Wrapper) Register(c echo.Context) error {
 		return c.String(409, "fingerprint is already in use")
 	}
 
+	// Now the registration can start
+
 	err = ioutil.WriteFile(w.Config.Server.PGPDir+fpr+".asc", []byte(form.PGPKey), 0600)
 	if err != nil {
 		return c.String(500, "Error processing PGP key")
@@ -85,6 +94,10 @@ func (w *Wrapper) Register(c echo.Context) error {
 		ContactMail: form.ContactMail,
 		Fingerprint: fpr,
 	})
+
+	if err := w.Keyring.AddKey(armored); err != nil {
+		return c.String(500, "Error adding key to keyring")
+	}
 
 	return c.String(200, "yey")
 }
