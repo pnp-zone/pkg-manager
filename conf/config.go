@@ -21,6 +21,7 @@ type Server struct {
 	TemplateDir             string
 	StaticDir               string
 	PGPDir                  string
+	PkgDir                  string
 }
 
 type Config struct {

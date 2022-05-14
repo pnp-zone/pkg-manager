@@ -15,3 +15,4 @@ UseForwardedProtoHeader = false
 TemplateDir = "templates/"
 StaticDir = "static/"
 PGPDir = "pgp/"
+PkgDir = "pkg/"
