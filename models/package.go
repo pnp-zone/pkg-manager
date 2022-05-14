@@ -7,9 +7,10 @@ import (
 
 type Package struct {
 	utilitymodels.CommonSoftDelete
-	Name       string       `gorm:"not null;unique"`
-	Maintainer []Maintainer `gorm:"many2many:package_maintainer;"`
-	SourceURL  *string
+	Name         string       `gorm:"not null;unique"`
+	Maintainer   []Maintainer `gorm:"many2many:package_maintainer;"`
+	FlagOrphaned bool         `gorm:"default:false"`
+	SourceURL    *string
 }
 
 type PackageVersion struct {
@@ -22,5 +23,7 @@ type PackageVersion struct {
 	VersionMinor uint   `gorm:"not null"`
 	VersionPatch uint   `gorm:"not null"`
 	Bytes        uint   `gorm:"not null"`
-	License      string `gorm:"site:32"`
+	Description  string `gorm:"not null;size:1024"`
+	License      string `gorm:"size:32"`
+	FlagYanked   bool   `gorm:"default:false"`
 }
