@@ -32,6 +32,28 @@ func StartServer(configPath string) {
 		}
 	}
 
+	// Directory structure generation
+	fmt.Print("Creating directory structure ... ")
+	if err := os.MkdirAll(config.Server.PGPDir, 0700); err != nil {
+		color.Println(color.RED, "error")
+		color.Println(color.RED, "Could not create PGPDir")
+		color.Println(color.RED, err.Error())
+		os.Exit(1)
+	}
+	if err := os.MkdirAll(config.Server.PkgDir, 0700); err != nil {
+		color.Println(color.RED, "error")
+		color.Println(color.RED, "Could not create PkgDir")
+		color.Println(color.RED, err.Error())
+		os.Exit(1)
+	}
+	if err := os.MkdirAll(config.Server.PkgDir+"packages/", 0700); err != nil {
+		color.Println(color.RED, "error")
+		color.Println(color.RED, "Could not create packages/ directory in PkgDir")
+		color.Println(color.RED, err.Error())
+		os.Exit(1)
+	}
+	color.Println(color.GREEN, "done")
+
 	// Database
 	db := initializeDatabase(config)
 
