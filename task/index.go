@@ -44,6 +44,7 @@ type PackageVersion struct {
 	VersionMinor uint   `json:"version_minor"`
 	VersionPatch uint   `json:"version_patch"`
 	FlagYanked   bool   `json:"flag_yanked"`
+	FlagLatest   bool   `json:"flag_latest"`
 }
 
 func BuildIndex(db *gorm.DB, keyring *crypto.KeyRing, config *conf.Config) {
@@ -96,6 +97,7 @@ func BuildIndex(db *gorm.DB, keyring *crypto.KeyRing, config *conf.Config) {
 					VersionMinor: pv.VersionMinor,
 					VersionPatch: pv.VersionPatch,
 					FlagYanked:   pv.FlagYanked,
+					FlagLatest:   pv.FlagLatest,
 				})
 			}
 

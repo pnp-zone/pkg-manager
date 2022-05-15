@@ -26,4 +26,5 @@ type PackageVersion struct {
 	Description  string `gorm:"not null;size:1024"`
 	License      string `gorm:"size:32"`
 	FlagYanked   bool   `gorm:"default:false"`
+	FlagLatest   bool   `gorm:"default:false"`
 }
