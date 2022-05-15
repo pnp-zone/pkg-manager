@@ -44,6 +44,12 @@ func StartServer(configPath string) {
 		color.Println(color.RED, err.Error())
 		os.Exit(1)
 	}
+	if err := os.MkdirAll(config.Server.PGPDir+"keys/", 0700); err != nil {
+		color.Println(color.RED, "error")
+		color.Println(color.RED, "Could not create keys/ dir in PGPDir")
+		color.Println(color.RED, err.Error())
+		os.Exit(1)
+	}
 	if err := os.MkdirAll(config.Server.PkgDir, 0700); err != nil {
 		color.Println(color.RED, "error")
 		color.Println(color.RED, "Could not create PkgDir")
@@ -124,13 +130,11 @@ func StartServer(configPath string) {
 		}
 	}
 
-	fmt.Println(ring.FirstKeyID)
-
 	fmt.Print("Populating keyring ... ")
 	maintainer := make([]models.Maintainer, 0)
 	db.Find(&maintainer)
 	for _, mt := range maintainer {
-		filename := config.Server.PGPDir + mt.Fingerprint + ".asc"
+		filename := config.Server.PGPDir + "keys/" + mt.Fingerprint
 		if content, err := ioutil.ReadFile(filename); err != nil {
 			color.Println(color.RED, "error")
 			color.Printf(color.RED, "Error retrieving key: %s\n", filename)
@@ -156,6 +160,8 @@ func StartServer(configPath string) {
 
 	// Webserver
 	e := echo.New()
+	e.HideBanner = true
+	e.HidePort = true
 
 	// Template rendering
 	if !strings.HasSuffix(config.Server.TemplateDir, "/") {
@@ -198,6 +204,7 @@ func StartServer(configPath string) {
 	go task.BuildIndex(db, ring, config)
 
 	// Start server
+	fmt.Println("Server is listening on:", color.Colorize(color.CYAN, config.Server.ListenAddress))
 	execution.SignalStart(e, config.Server.ListenAddress, &execution.Config{
 		ReloadFunc: func() {
 			StartServer(configPath)

@@ -30,4 +30,5 @@ func defineRoutes(e *echo.Echo, db *gorm.DB, pool worker.Pool, keyring *crypto.K
 
 	e.Static("/static/", config.Server.StaticDir)
 	e.Static("/packages/", config.Server.PkgDir)
+	e.Static("/keys/", config.Server.PGPDir+"keys/")
 }

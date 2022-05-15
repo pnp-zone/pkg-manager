@@ -78,10 +78,23 @@ func (w *Wrapper) Register(c echo.Context) error {
 	}
 
 	// Now the registration can start
-
-	err = ioutil.WriteFile(w.Config.Server.PGPDir+fpr+".asc", []byte(form.PGPKey), 0600)
-	if err != nil {
+	if err := ioutil.WriteFile(w.Config.Server.PGPDir+"keys/"+fpr, []byte(form.PGPKey), 0600); err != nil {
 		return c.String(500, "Error processing PGP key")
+	}
+
+	message := crypto.NewPlainMessage([]byte(form.PGPKey))
+	detached, err := w.Keyring.SignDetached(message)
+	if err != nil {
+		return c.String(500, "Couldn't sign your key")
+	}
+
+	signedArmored, err := detached.GetArmored()
+	if err != nil {
+		return c.String(500, "Couldn't sign your key")
+	}
+
+	if err := ioutil.WriteFile(w.Config.Server.PGPDir+"keys/"+fpr+".asc", []byte(signedArmored), 0600); err != nil {
+		return c.String(500, "Error generating detached sign")
 	}
 
 	user, err := database.CreateUser(w.DB, form.Username, form.Password, &form.Mail, true)
