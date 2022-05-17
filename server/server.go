@@ -1,6 +1,7 @@
 package server
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"github.com/ProtonMail/gopenpgp/v2/crypto"
@@ -34,6 +35,12 @@ func StartServer(configPath string) {
 		if err := toml.Unmarshal(configBytes, config); err != nil {
 			panic(err)
 		}
+	}
+
+	if err := config.Fix(); err != nil {
+		color.Println(color.RED, "Config error:")
+		color.Println(color.RED, err.Error())
+		os.Exit(1)
 	}
 
 	// Directory structure generation
@@ -130,16 +137,40 @@ func StartServer(configPath string) {
 		}
 	}
 
-	fmt.Print("Populating keyring ... ")
 	maintainer := make([]models.Maintainer, 0)
 	db.Find(&maintainer)
+	removeAll := false
 	for _, mt := range maintainer {
 		filename := config.Server.PGPDir + "keys/" + mt.Fingerprint
 		if content, err := ioutil.ReadFile(filename); err != nil {
-			color.Println(color.RED, "error")
+			if removeAll {
+				color.Printf(color.CYAN, "Skipping %s\n", mt.Fingerprint)
+				continue
+			}
 			color.Printf(color.RED, "Error retrieving key: %s\n", filename)
 			color.Println(color.RED, err.Error())
-			os.Exit(1)
+			reader := bufio.NewReader(os.Stdin)
+			for {
+				color.Print(color.PURPLE, "Skip key? [y/n/a] ")
+				line, _, err := reader.ReadLine()
+				if err != nil {
+					color.Println(color.PURPLE, "Invalid choice.")
+					continue
+				}
+				if string(line) == "n" {
+					os.Exit(1)
+				} else if string(line) == "y" {
+					color.Printf(color.CYAN, "Skipping %s\n", mt.Fingerprint)
+					break
+				} else if string(line) == "a" {
+					color.Printf(color.CYAN, "Skipping %s\n", mt.Fingerprint)
+					removeAll = true
+					break
+				} else {
+					color.Println(color.PURPLE, "Invalid choice.")
+					continue
+				}
+			}
 		} else {
 			if armored, err := crypto.NewKeyFromArmored(string(content)); err != nil {
 				color.Println(color.RED, "error")
@@ -156,7 +187,6 @@ func StartServer(configPath string) {
 			}
 		}
 	}
-	color.Println(color.GREEN, "done")
 
 	// Webserver
 	e := echo.New()
