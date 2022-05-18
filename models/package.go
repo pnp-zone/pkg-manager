@@ -15,16 +15,19 @@ type Package struct {
 
 type PackageVersion struct {
 	utilitymodels.CommonID
-	CreatedAt    time.Time
-	Downloads    uint `gorm:"default:0"`
-	PackageID    uint `gorm:"not null"`
-	Package      Package
-	VersionMajor uint   `gorm:"not null"`
-	VersionMinor uint   `gorm:"not null"`
-	VersionPatch uint   `gorm:"not null"`
-	Bytes        uint   `gorm:"not null"`
-	Description  string `gorm:"not null;size:1024"`
-	License      string `gorm:"size:32"`
-	FlagYanked   bool   `gorm:"default:false"`
-	FlagLatest   bool   `gorm:"default:false"`
+	CreatedAt           time.Time
+	Downloads           uint `gorm:"default:0"`
+	PackageID           uint `gorm:"not null"`
+	Package             Package
+	VersionMajor        uint   `gorm:"not null"`
+	VersionMinor        uint   `gorm:"not null"`
+	VersionPatch        uint   `gorm:"not null"`
+	PNPZoneVersionMajor uint   `gorm:"not null"`
+	PNPZoneVersionMinor uint   `gorm:"not null"`
+	PNPZoneVersionPatch uint   `gorm:"not null"`
+	Bytes               uint   `gorm:"not null"`
+	Description         string `gorm:"not null;size:1024"`
+	License             string `gorm:"size:32"`
+	FlagYanked          bool   `gorm:"default:false"`
+	FlagLatest          bool   `gorm:"default:false"`
 }

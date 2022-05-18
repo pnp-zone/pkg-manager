@@ -37,14 +37,17 @@ type Maintainer struct {
 }
 
 type PackageVersion struct {
-	License      string `json:"license"`
-	Description  string `json:"description"`
-	Bytes        uint   `json:"bytes"`
-	VersionMajor uint   `json:"version_major"`
-	VersionMinor uint   `json:"version_minor"`
-	VersionPatch uint   `json:"version_patch"`
-	FlagYanked   bool   `json:"flag_yanked"`
-	FlagLatest   bool   `json:"flag_latest"`
+	License             string `json:"license"`
+	Description         string `json:"description"`
+	Bytes               uint   `json:"bytes"`
+	VersionMajor        uint   `json:"version_major"`
+	VersionMinor        uint   `json:"version_minor"`
+	VersionPatch        uint   `json:"version_patch"`
+	PNPZoneVersionMajor uint   `json:"pnp_zone_version_major"`
+	PNPZoneVersionMinor uint   `json:"pnp_zone_version_minor"`
+	PNPZoneVersionPatch uint   `json:"pnp_zone_version_patch"`
+	FlagYanked          bool   `json:"flag_yanked"`
+	FlagLatest          bool   `json:"flag_latest"`
 }
 
 func BuildIndex(db *gorm.DB, keyring *crypto.KeyRing, config *conf.Config) {
@@ -90,14 +93,17 @@ func BuildIndex(db *gorm.DB, keyring *crypto.KeyRing, config *conf.Config) {
 
 			for _, pv := range packageVersions[p.ID] {
 				pack.PackageVersions = append(pack.PackageVersions, PackageVersion{
-					License:      pv.License,
-					Description:  pv.Description,
-					Bytes:        pv.Bytes,
-					VersionMajor: pv.VersionMajor,
-					VersionMinor: pv.VersionMinor,
-					VersionPatch: pv.VersionPatch,
-					FlagYanked:   pv.FlagYanked,
-					FlagLatest:   pv.FlagLatest,
+					License:             pv.License,
+					Description:         pv.Description,
+					Bytes:               pv.Bytes,
+					VersionMajor:        pv.VersionMajor,
+					VersionMinor:        pv.VersionMinor,
+					VersionPatch:        pv.VersionPatch,
+					PNPZoneVersionMajor: pv.PNPZoneVersionMajor,
+					PNPZoneVersionMinor: pv.PNPZoneVersionMinor,
+					PNPZoneVersionPatch: pv.PNPZoneVersionPatch,
+					FlagYanked:          pv.FlagYanked,
+					FlagLatest:          pv.FlagLatest,
 				})
 			}
 
